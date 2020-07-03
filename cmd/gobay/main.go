@@ -2,15 +2,16 @@ package main
 
 import (
 	"bytes"
-	"github.com/iancoleman/strcase"
-	"github.com/markbates/pkger"
-	"github.com/spf13/cobra"
 	"io/ioutil"
 	"log"
 	"os"
 	"path"
 	"strings"
 	"text/template"
+
+	"github.com/iancoleman/strcase"
+	"github.com/markbates/pkger"
+	"github.com/spf13/cobra"
 )
 
 type _projTemplate struct {
@@ -35,7 +36,7 @@ type _projConfig struct {
 var (
 	projDirs      = []_projDir{}
 	projTemplates = []_projTemplate{}
-	projConfig    = _projConfig{}
+	projConfig    = _projConfig{} // 项目的核心配置
 	projRawTmpl   = map[string]string{}
 	tmplFuncs     = template.FuncMap{
 		"toCamel":      strcase.ToCamel,
@@ -50,7 +51,7 @@ const (
 	DIRMODE      os.FileMode = os.ModeDir | 0755
 	FILEMODE     os.FileMode = 0644
 	DIRPREFIX                = "/cmd/gobay/templates/"
-	TRIMPREFIX               = "github.com/shanbay/gobay:/cmd/gobay/templates/"
+	TRIMPREFIX               = "github.com/hj24/gobay:/cmd/gobay/templates/"
 )
 
 func main() {
@@ -62,13 +63,17 @@ func main() {
 				check(cmd.Help())
 				return
 			}
+			// 获取文件路径
 			url := args[0]
+			// 删除文件路径最后的 / ：/usr/desktop/app/ => /usr/desktop/app
 			url = strings.TrimSuffix(url, "/")
-			projConfig.Url = url
-			if projConfig.Name == "" {
+			// 配置项目
+			projConfig.Url = url       // 初始化 url
+			if projConfig.Name == "" { // 如果没有项目名，则取传进来的路径的最后一个节点 /usr/desktop/app => app
 				strs := strings.Split(url, "/")
 				projConfig.Name = strs[len(strs)-1]
 			}
+			// 开始新建一个项目，会复制模板到你指定的目录
 			newProject()
 		},
 		Short: "initialize new gobay project",
@@ -132,6 +137,7 @@ func loadTemplates() error {
 			if err != nil {
 				return err
 			}
+			log.Println("XIXI", file)
 			b := make([]byte, info.Size())
 			if _, err = file.Read(b); err != nil {
 				return err
