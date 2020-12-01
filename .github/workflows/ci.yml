@@ -26,6 +26,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: abc
           MYSQL_USER: root
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+          MYSQL_ROOT_HOST: "127.0.0.1"
         ports:
           - 3306:3306
         options: >-
@@ -41,10 +42,21 @@ jobs:
           RABBITMQ_DEFAULT_PASS: guest
         ports:
           - 5672:5672
+        options: >-
+          --health-cmd "rabbitmqctl node_health_check -n guest@guest"
+          --health-interval 10s
+          --health-start-period 10s
+          --health-timeout 5s
+          --health-retries 10
       redis-server:
         image: redis
         ports:
           - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Check out code into Go module directory 
