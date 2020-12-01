@@ -19,6 +19,7 @@ var (
 )
 
 func init() {
+	log.Println("xixi")
 	exts := map[gobay.Key]gobay.Extension{
 		"entext": &entext.EntExt{
 			NS: "db_",
