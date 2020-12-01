@@ -43,7 +43,7 @@ jobs:
         ports:
           - 5672:5672
         options: >-
-          --health-cmd "rabbitmqctl node_health_check -n rabbit@stringer"
+          --health-cmd "rabbitmqctl node_health_check"
           --health-interval 10s
           --health-start-period 10s
           --health-timeout 5s
