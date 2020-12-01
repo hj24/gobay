@@ -22,6 +22,7 @@ jobs:
       mysql:
         image: ${{ matrix.mysql-version }}
         env:
+          MYSQL_DATABASE: gobay
           MYSQL_ROOT_PASSWORD: abc
           MYSQL_USER: root
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
@@ -58,12 +59,11 @@ jobs:
         uses: actions/cache@v2
         with:
           path: $GOPATH/pkg/mod
-          key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('go.mod') }}
+          key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
 
       - name: Before tests
         run: |
           go install github.com/golangci/golangci-lint/cmd/golangci-lint
-          mysql -e 'CREATE DATABASE gobay DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
 
       - name: Run tests and lint
         run: |
