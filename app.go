@@ -5,13 +5,14 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 
-	"github.com/spf13/viper"
 	"github.com/hashicorp/go-multierror"
+	"github.com/spf13/viper"
 )
 
 // A Key represents a key for a Extension.
@@ -52,6 +53,7 @@ func (d *Application) GetOK(key Key) (Extension, bool) {
 }
 
 func (d *Application) Env() string {
+	log.Println("test")
 	return d.env
 }
 
