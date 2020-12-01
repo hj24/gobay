@@ -25,12 +25,11 @@ jobs:
           MYSQL_DATABASE: gobay
           MYSQL_ROOT_HOST: "%"
           MYSQL_USER: root
-          MYSQL_ROOT_PASSWORD: abc
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
         ports:
           - 3306:3306
         options: >-
-          --health-cmd "mysqladmin ping -uroot -pabc"
+          --health-cmd "mysqladmin ping -uroot"
           --health-interval 10s
           --health-start-period 10s
           --health-timeout 5s
